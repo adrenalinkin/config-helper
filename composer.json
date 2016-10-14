@@ -1,0 +1,30 @@
+{
+    "name":        "adrenalinkin/config-helper",
+    "description": "This component extends Symfony Config Component and provides store configurations in the bundles directly",
+    "type":        "library",
+    "keywords":    ["config", "helper", "DI", "DependencyInjection", "symfony2", "component"],
+    "license":     "MIT",
+
+    "authors": [
+        {
+            "email": "adrenalinkin@gmail.com",
+            "name":  "Viktor Linkin",
+            "role":  "Developer"
+        }
+    ],
+
+    "require": {
+        "php":            "~5.4",
+        "symfony/config": "2.5.*"
+    },
+
+    "suggest": {
+        "symfony/symfony": "Allows more advanced functionality with full Symfony package"
+    },
+
+    "autoload": {
+        "psr-4": {
+            "Linkin\\Component\\ConfigHelper\\": ""
+        }
+    }
+}
