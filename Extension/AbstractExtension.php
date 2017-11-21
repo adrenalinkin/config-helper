@@ -1,5 +1,14 @@
 <?php
 
+/*
+ * This file is part of the ConfigHelper component package.
+ *
+ * (c) Viktor Linkin <adrenalinkin@gmail.com>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
+
 namespace Linkin\Component\ConfigHelper\Extension;
 
 use Symfony\Component\DependencyInjection\ContainerBuilder;
@@ -44,7 +53,7 @@ abstract class AbstractExtension extends Extension
     private function getFinder($fileName, ContainerBuilder $container)
     {
         $finder       = (new Finder())->files()->name($fileName);
-        $resourcesDir = 'Resources' . DIRECTORY_SEPARATOR . 'config';
+        $resourcesDir = 'Resources'.DIRECTORY_SEPARATOR.'config';
 
         if (self::$directoriesCache) {
             return $finder->in(self::$directoriesCache);
@@ -53,7 +62,7 @@ abstract class AbstractExtension extends Extension
         foreach ($container->getParameter('kernel.bundles') as $name => $pathToBundle) {
             $reflector = new \ReflectionClass($pathToBundle);
             $fileName  = $reflector->getFileName();
-            $fileName  = str_replace($name . '.php', $resourcesDir, $fileName);
+            $fileName  = str_replace($name.'.php', $resourcesDir, $fileName);
 
             try {
                 $finder->in($fileName);
