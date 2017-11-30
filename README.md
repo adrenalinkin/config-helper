@@ -60,7 +60,7 @@ acme_config:
 способ:
 
 1. Необходимо придумать название файла, в котором будет храниться ваша конфигурация, например `acmeConfig.yml`.
-2. Необходимо унаследовать `AcmeConfigExtension` от [AbstractExtension](../Extension/AbstractExtension.php):
+2. Необходимо унаследовать `AcmeConfigExtension` от [AbstractExtension](./Extension/AbstractExtension.php):
 ```php
 namespace Acme\Bundle\ConfigBundle\DependencyInjection;
 
