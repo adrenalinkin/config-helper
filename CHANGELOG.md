@@ -1,5 +1,10 @@
+## [1.0.3] - 2018-02-02
+### Changed
+- Improved exception catching.
+- Approved support of the Symfony 2.8.
+
 ## [1.0.2] - 2017-11-22
-### Updated
+### Changed
 - Approved support of the Symfony 2.6.
 
 ## [1.0.1] - 2017-11-21

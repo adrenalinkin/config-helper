@@ -60,7 +60,12 @@ abstract class AbstractExtension extends Extension
         }
 
         foreach ($container->getParameter('kernel.bundles') as $name => $pathToBundle) {
-            $reflector = new \ReflectionClass($pathToBundle);
+            try {
+                $reflector = new \ReflectionClass($pathToBundle);
+            } catch (\ReflectionException $e) {
+                continue;
+            }
+
             $fileName  = $reflector->getFileName();
             $fileName  = str_replace($name.'.php', $resourcesDir, $fileName);
 
