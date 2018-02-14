@@ -1,8 +1,8 @@
 {
     "name":        "adrenalinkin/config-helper",
-    "description": "This component extends Symfony Config Component and provides store configurations in the bundles directly",
+    "description": "Extends Symfony Dependency Injection Component and provides store configurations in each bundles separately by common yaml-file",
     "type":        "library",
-    "keywords":    ["config", "helper", "DI", "DependencyInjection", "symfony2", "component"],
+    "keywords":    ["config", "helper", "DI", "DependencyInjection", "symfony", "component", "symfony-component"],
     "license":     "MIT",
 
     "authors": [
@@ -14,8 +14,11 @@
     ],
 
     "require": {
-        "php":            ">=5.4",
-        "symfony/config": "~2.5,<2.7.0"
+        "php":                          "~5.4||~7.0",
+        "symfony/config":               "~2.5",
+        "symfony/dependency-injection": "~2.5",
+        "symfony/finder":               "~2.5",
+        "symfony/yaml":                 "~2.3.42|~2.7.14|~2.8.7|~3.0.7"
     },
 
     "suggest": {

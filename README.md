@@ -1,46 +1,59 @@
-Config Helper
+Config Helper [![На Русском](https://img.shields.io/badge/Перейти_на-Русский-green.svg?style=flat-square)](./README.RU.md)
 =============
 
-Компонент позволяет расширить стандартный класс `Symfony\Component\DependencyInjection\Extension\Extension` и получить
-доступ к сбору конфигурации `YML` среди всех зарегистрированных бандлов проекта.
+Introduction
+------------
 
-Пример использования и сравнение со стандартными методами
----------------------------------------------------------
+Component allows extend standard class `Symfony\Component\DependencyInjection\Extension\Extension` and open possibility
+for collect `YAML` configurations across all registered bundles.
 
-Допустим что в нашем проекте существуют два бандла, хранящие бизнес-логику двух обособленных частей системы:
- * `AcmeBundle` с сущностями `AcmeBundle:User` и `AcmeBundle:Position`
- * `AcmePostBundle` с сущностью `AcmePostBundle:Post`
+Installation
+------------
 
-Представьте что вам понадобилось добавить конфигурацию с для каждой сущности. Допустим что конфигурация должна
-определять роль пользователя обладая которой он получит доступ к расширенной настройке сущности в веб-интерфейсе.
-Для создания конфигурации создан бандл `AcmeConfigBundle`, который позволяет регистрировать конфигурацию для разных
-сущностей вашего проекта. Конечная конфигурация в формате `YML` будет выглядеть следующим образом:
+Open a command console, enter your project directory and execute the following command to download the latest stable
+version of this component:
+```text
+    composer require adrenalinkin/config-helper
+```
+*This command requires you to have [Composer](https://getcomposer.org) install globally.*
+
+Usage examples and compare with standard methods
+------------------------------------------------
+
+Let's say we have two bundles in our project. Bundles contains business-logic of the two separate system parts:
+ * `AcmeBundle` with entities `AcmeBundle:User` and `AcmeBundle:Position`
+ * `AcmePostBundle` with entity `AcmePostBundle:Post`
+
+Imagine you need to add configuration for each entity. Let's say we need configuration which should determine
+user's system role for get access to specific functionality. For the configuration creation has been created bundle
+`AcmeConfigBundle`. Configuration example:
 
 ```yaml
 acme_config:
-    AcmeBundle:User:     ROLE_USER_ADMIN # ключ - это имя класса сущности, а значение - роль
+    AcmeBundle:User:     ROLE_USER_ADMIN # key - name of the entity; value - role
     AcmeBundle:Position: ROLE_USER_ADMIN
     AcmePostBundle:Post: ROLE_POST_ADMIN
 ```
 
-### Стандартные подходы
+### Standard methods
 
-Конечно можно хранить конфигурацию в глобальном файле `app/config/config.yml`:
+We can put configuration into global configuration file `app/config/config.yml`:
 
 ```yaml
 # app/config/config.yml
 
-# конфигурация других бандлов
+# other bundle's configurations
+
 acme_config:
     AcmeBundle:User:     ROLE_USER_ADMIN
     AcmeBundle:Position: ROLE_USER_ADMIN
     AcmePostBundle:Post: ROLE_POST_ADMIN
 
-# конфигурация других бандлов
-
+# other bundle's configurations
 ```
 
-Или поместить конфигурацию внутри бандла в свой собственный файл и затем загружать ее оттуда в `AcmeConfigExtension`
+Also, we can put configuration into `AcmeConfigBundle` bundle under specific configuration file and load that from
+`AcmeConfigExtension`:
 
 ```yaml
 #Acme/ConfigBundle/Resources/config/custom.yml
@@ -50,18 +63,19 @@ acme_config:
     AcmePostBundle:Post: ROLE_POST_ADMIN
 ```
 
-Однако оба эти способа хранения конфигурации, для нашей реализации, имеют один существенный недостаток - при появлении
-новых бандлов нам придется каждый раз модифицировать глобальный файл конфигурации или файл конфигурации внутри бандла.
-**В обоих случаях появляется жесткая связь бандлов и затрудняется сопровождение проекта.**
+However, both of method, for our realisation, got one flaw. All time when we will create new bundles - we will need
+modify global configuration file or configuration file in the `AcmeConfigBundle`.
+**Both situation provoke a hard-linking between separate parts of the project**
 
-### Что предлагает компонент
+### Component usage
 
-Для устранения появления нежелательных связей в проекте на основании конфигураций в компоненте разработан следующий
-способ:
+To prevent hard-linkin between separate parts of the project you need:
 
-1. Необходимо придумать название файла, в котором будет храниться ваша конфигурация, например `acmeConfig.yml`.
-2. Необходимо унаследовать `AcmeConfigExtension` от [AbstractExtension](./Extension/AbstractExtension.php):
+* Choose file name for configuration store, for example `acmeConfig.yml`.
+* Extends `AcmeConfigExtension` from [AbstractExtension](./Extension/AbstractExtension.php):
 ```php
+<?php
+
 namespace Acme\Bundle\ConfigBundle\DependencyInjection;
 
 use Linkin\Component\ConfigHelper\Extension\AbstractExtension;
@@ -85,19 +99,19 @@ class AcmeConfigExtension extends AbstractExtension
      */
     public function load(array $configs, ContainerBuilder $container)
     {
-        // загружаются конфигурации из всех бандлов из файла acmeConfig.yml
-        $configs    = $this->getConfigurationsFromFile('acmeConfig.yml', $container);
-        // обрабатываем полученную конфигурацию
-        $configs    = $this->processConfiguration(new Configuration(), $configs);
+        // load all configurations from the all registered bundles
+        $configs = $this->getConfigurationsFromFile('acmeConfig.yml', $container);
+        // process received configuration
+        $configs = $this->processConfiguration(new Configuration(), $configs);
         
-        // необходимые действия
+        // some actions
 
-        $loader = new Loader\YamlFileLoader($container, new FileLocator(__DIR__ . '/../Resources/config'));
+        $loader = new Loader\YamlFileLoader($container, new FileLocator(__DIR__.'/../Resources/config'));
         $loader->load('services.yml');
     }
 }
 ```
-3. Создайте конфигурационные файлы в тех бандлах, где это необходимо
+* Create configuration files per bundles:
 ```yaml
 # Acme/AcmeBundle/Resources/config/acmeConfig.yml
 acme_config:
@@ -110,7 +124,10 @@ acme_config:
     AcmePostBundle:Post: ROLE_POST_ADMIN
 ```
 
-Данный подход позволяет вам создавать и удалять конфигурации в конкретных бандлах и при этом изменения не потребуются в
-проекте глобально если вы удалите один из файлов или целый бандл (`AcmePostBundle` например).
-Более того - вы свободно сможете удалить и бандл-носитель конфигурации `AcmeConfigBundle` без необходимости удаления
-конфигураций.
+This method allows you create and remove configurations in the bundles without global changes in the project. You can
+remove some configuration in the needed bundle or even remove whole bundle ( for example `AcmePostBundle`).
+
+License
+-------
+
+[![license](https://img.shields.io/badge/License-MIT-green.svg?style=flat-square)](./LICENSE)

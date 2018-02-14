@@ -22,13 +22,17 @@ use Symfony\Component\Yaml\Yaml;
 abstract class AbstractExtension extends Extension
 {
     /**
+     * List of the path to configuration directories of the all registered bundles
+     *
      * @var array
      */
     private static $directoriesCache = [];
 
     /**
-     * @param string           $fileName
-     * @param ContainerBuilder $container
+     * Returns all configurations registered in the specific yaml file.
+     *
+     * @param string           $fileName  Name of the file with extension
+     * @param ContainerBuilder $container Container builder
      *
      * @return array
      */
@@ -45,6 +49,8 @@ abstract class AbstractExtension extends Extension
     }
 
     /**
+     * Build and return finder
+     *
      * @param string           $fileName
      * @param ContainerBuilder $container
      *
@@ -66,8 +72,8 @@ abstract class AbstractExtension extends Extension
                 continue;
             }
 
-            $fileName  = $reflector->getFileName();
-            $fileName  = str_replace($name.'.php', $resourcesDir, $fileName);
+            $fileName = $reflector->getFileName();
+            $fileName = str_replace($name.'.php', $resourcesDir, $fileName);
 
             try {
                 $finder->in($fileName);
