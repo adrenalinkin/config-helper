@@ -1,4 +1,7 @@
 ## [1.0.5] - 2018-03-20
+### Added
+- Added third parameter to the `getConfigurationsFromFile` which provides possibility to return stack
+    of the configurations, instead of recursive merge.
 ### Changed
 - Approved support of the Symfony 3.
 

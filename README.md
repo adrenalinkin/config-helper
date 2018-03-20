@@ -71,7 +71,7 @@ modify global configuration file or configuration file in the `AcmeConfigBundle`
 
 To prevent hard-linkin between separate parts of the project you need:
 
-* Choose file name for configuration store, for example `acmeConfig.yml`.
+* Choose file name for configuration store, for example `acme_config.yml`.
 * Extends `AcmeConfigExtension` from [AbstractExtension](./Extension/AbstractExtension.php):
 ```php
 <?php
@@ -100,7 +100,7 @@ class AcmeConfigExtension extends AbstractExtension
     public function load(array $configs, ContainerBuilder $container)
     {
         // load all configurations from the all registered bundles
-        $configs = $this->getConfigurationsFromFile('acmeConfig.yml', $container);
+        $configs = $this->getConfigurationsFromFile('acme_config.yml', $container);
         // process received configuration
         $configs = $this->processConfiguration(new Configuration(), $configs);
         
@@ -113,19 +113,24 @@ class AcmeConfigExtension extends AbstractExtension
 ```
 * Create configuration files per bundles:
 ```yaml
-# Acme/AcmeBundle/Resources/config/acmeConfig.yml
+# Acme/AcmeBundle/Resources/config/acme_config.yml
 acme_config:
     AcmeBundle:User:     ROLE_USER_ADMIN
     AcmeBundle:Position: ROLE_USER_ADMIN
 ```
 ```yaml
-# AcmePost/AcmePostBundle/Resources/config/acmeConfig.yml
+# AcmePost/AcmePostBundle/Resources/config/acme_config.yml
 acme_config:
     AcmePostBundle:Post: ROLE_POST_ADMIN
 ```
 
 This method allows you create and remove configurations in the bundles without global changes in the project. You can
 remove some configuration in the needed bundle or even remove whole bundle ( for example `AcmePostBundle`).
+
+**Note**: By default method `getConfigurationsFromFile($fileName, ContainerBuilder $container, $merge = true)` uses
+standard PHP function [array_merge_recursive](http://php.net/manual/en/function.array-merge-recursive.php) to merge
+all found configurations. If you want prepare configuration by yourself put `false` as third parameter and receive
+stack of the all registered configurations.
 
 License
 -------

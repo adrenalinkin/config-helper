@@ -71,7 +71,7 @@ acme_config:
 
 Для устранения появления нежелательных связей в проекте необходимо:
 
- * Определить название файла для храениения конфигурации, например `acmeConfig.yml`.
+ * Определить название файла для храениения конфигурации, например `acme_config.yml`.
  * Унаследовать `AcmeConfigExtension` от [AbstractExtension](./Extension/AbstractExtension.php):
 ```php
 <?php
@@ -99,8 +99,8 @@ class AcmeConfigExtension extends AbstractExtension
      */
     public function load(array $configs, ContainerBuilder $container)
     {
-        // загружаются конфигурации из всех бандлов из файла acmeConfig.yml
-        $configs = $this->getConfigurationsFromFile('acmeConfig.yml', $container);
+        // загружаются конфигурации из всех бандлов из файла acme_config.yml
+        $configs = $this->getConfigurationsFromFile('acme_config.yml', $container);
         // обрабатываем полученную конфигурацию
         $configs = $this->processConfiguration(new Configuration(), $configs);
         
@@ -113,19 +113,24 @@ class AcmeConfigExtension extends AbstractExtension
 ```
  * Создать конфигурационные файлы в тех бандлах, где это необходимо:
 ```yaml
-# Acme/AcmeBundle/Resources/config/acmeConfig.yml
+# Acme/AcmeBundle/Resources/config/acme_config.yml
 acme_config:
     AcmeBundle:User:     ROLE_USER_ADMIN
     AcmeBundle:Position: ROLE_USER_ADMIN
 ```
 ```yaml
-# AcmePost/AcmePostBundle/Resources/config/acmeConfig.yml
+# AcmePost/AcmePostBundle/Resources/config/acme_config.yml
 acme_config:
     AcmePostBundle:Post: ROLE_POST_ADMIN
 ```
 
 Данный подход позволяет вам создавать и удалять конфигурации в конкретных бандлах и при этом изменения не потребуются в
 проекте глобально если вы удалите один из файлов или целый бандл (`AcmePostBundle` например).
+
+**Примечание**: По умолчанию метод `getConfigurationsFromFile($fileName, ContainerBuilder $container, $merge = true)`
+использует стандартную функцию PHP [array_merge_recursive](http://php.net/manual/en/function.array-merge-recursive.php)
+для объединения всех найденных конфигураций. Если вы хотите самостоятельно обработать полученный список конфигураций
+передайте третьим параметром `false` и получите список всех зарегистрированных конфигураций.
 
 Лицензия
 --------

@@ -33,16 +33,29 @@ abstract class AbstractExtension extends Extension
      *
      * @param string           $fileName  Name of the file with extension
      * @param ContainerBuilder $container Container builder
+     * @param bool             $merge     Merge configuration recursively or just stack
      *
      * @return array
      */
-    protected function getConfigurationsFromFile($fileName, ContainerBuilder $container)
+    protected function getConfigurationsFromFile($fileName, ContainerBuilder $container, $merge = true)
     {
         $configs = [];
 
         /** @var \Symfony\Component\Finder\SplFileInfo $file */
         foreach ($this->getFinder($fileName, $container) as $file) {
-            $configs = array_merge_recursive($configs, Yaml::parse($file->getContents()));
+            $currentConfiguration = Yaml::parse($file->getContents());
+
+            // skip empty files
+            if (empty($currentConfiguration)) {
+                continue;
+            }
+
+            // merge configurations recursively or just stack
+            if ($merge) {
+                $configs = array_merge_recursive($configs, $currentConfiguration);
+            } else {
+                $configs[] = reset($currentConfiguration);
+            }
         }
 
         return $configs;
