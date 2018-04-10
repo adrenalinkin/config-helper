@@ -2,7 +2,7 @@
     "name":        "adrenalinkin/config-helper",
     "description": "Extends Symfony Dependency Injection Component and provides store configurations in each bundles separately by common yaml-file",
     "type":        "library",
-    "keywords":    ["config", "helper", "DI", "DependencyInjection", "symfony-component", "yaml"],
+    "keywords":    ["symfony-component", "yaml-configuration", "dependency-injection", "helper"],
     "license":     "MIT",
 
     "authors": [

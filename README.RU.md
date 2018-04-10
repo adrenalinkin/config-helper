@@ -12,7 +12,7 @@ Config Helper [![In English](https://img.shields.io/badge/Switch_To-English-gree
 
 Откройте консоль и, перейдя в директорию проекта, выполните следующую команду для загрузки наиболее подходящей
 стабильной версии этого компонента:
-```text
+```bash
     composer require adrenalinkin/config-helper
 ```
 *Эта команда подразумевает что [Composer](https://getcomposer.org) установлен и доступен глобально.*
